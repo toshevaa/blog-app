@@ -3,36 +3,46 @@ import { createClient } from 'contentful'
 import { useListActions } from './useListActions'
 
 const client = createClient({
-  space: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
-  accessToken: import.meta.env.VITE_CONTENTFUL_ACCESS_TOKEN
+  space: 'gtumihl4q7si',
+  accessToken: 'VxuR21ciWacDiADRy-gKS7nLczA5bJUeGNgry4FJ898',
+  environment: 'master'
 })
 
 export function useBlogs() {
   const blogs = ref([])
-  const loading = ref(true)
+  const isLoading = ref(true)
   const error = ref(null)
-  const { addItem, deleteItem } = useListActions(blogs)
 
   const fetchBlogs = async () => {
     try {
-      const response = await client.getEntries({
-        content_type: 'blogPost'
-      })
-      blogs.value = response.items.map(item => ({
-        id: item.sys.id,
+      const res = await client.getEntries({ content_type: 'blog' })
+      blogs.value = res.items.map(item => ({
+        id: item.fields.slug,
         title: item.fields.title,
         description: item.fields.description,
-        heroImage: item.fields.heroImage?.fields?.file?.url,
-        publishDate: item.fields.publishDate
+        heroImage: item.fields.heroImage?.fields?.file?.url || '',
+        publishDate: new Date(item.fields.publishDate).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })
       }))
-    } catch (e) {
-      error.value = e.message
+    } catch (err) {
+      error.value = err
     } finally {
-      loading.value = false
+      isLoading.value = false
     }
   }
 
   fetchBlogs()
 
-  return { blogs, loading, error, addItem, deleteItem }
+  const { addItem, deleteItem } = useListActions(blogs)
+
+  return {
+    blogs,
+    isLoading,
+    error,
+    addItem,
+    deleteItem
+  }
 }

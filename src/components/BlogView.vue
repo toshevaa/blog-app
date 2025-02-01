@@ -1,73 +1,50 @@
 <template>
     <div class="blog-view">
-      <button v-if="!showEditor" @click="showEditor = true">Add new blog</button>
-      <BlogEditor v-else @addNewItem="addItem" />
-      
-      <Blogs 
+    
+      <Blogs
         :blogs="blogs"
-        :isLoading="isLoading"
+        :is-loading="isLoading"
         :error="error"
-        @deleteBlog="deleteItem"
+        @delete-blog="deleteItem"
       />
+      <button class="add-blog" v-if="!showEditor" @click="showEditor = true">Add New Blog</button>
+      <BlogEditor v-else @add-new-item="handleAddItem" />
     </div>
   </template>
   
   <script setup>
   import { ref } from 'vue'
+  import { useBlogs } from '../composables/useBlogs'
   import BlogEditor from './BlogEditor.vue'
   import Blogs from './Blogs.vue'
-  import { useBlogs } from '../composables/useBlogs'
   
   const showEditor = ref(false)
-  const { blogs, loading: isLoading, error, addItem, deleteItem } = useBlogs()
+  const { blogs, isLoading, error, addItem, deleteItem } = useBlogs()
+  
+  const handleAddItem = (newBlog) => {
+    addItem(newBlog)
+    showEditor.value = false
+  }
   </script>
   
-  <style>
-  .blog-editor {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
+  <style scoped>
+  .blog-view {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
   }
-  
-  .blog-editor input,
-  .blog-editor textarea {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 8px;
+  button {
+    background: #2196F3;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    margin-left: 12px;
+    margin-bottom: 1rem;
+    cursor: pointer;
   }
-  
-  .blog-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .blog-item {
-    border: 1px solid #eee;
-    padding: 15px;
-    border-radius: 8px;
-  }
-  
-  .blog-item img {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .search-section {
-    padding: 20px;
-  }
-  
-  .search-section input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-  }
-  
-  fieldset {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin: 10px 0;
+
+  .add-blog:hover{
+    background-color: #0469bb;
+
   }
   </style>

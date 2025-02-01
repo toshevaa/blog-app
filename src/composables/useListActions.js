@@ -1,14 +1,13 @@
-export function useListActions(items) {
-    const addItem = (newItem) => {
-      items.value.push(newItem)
-    }
-  
-    const deleteItem = (id) => {
-      const index = items.value.findIndex(item => item.id === id)
-      if (index !== -1) {
-        items.value.splice(index, 1)
-      }
-    }
-  
-    return { addItem, deleteItem }
+import { ref } from 'vue'
+
+export function useListActions(listRef) {
+  const addItem = (item) => {
+    listRef.value.push(item)
   }
+
+  const deleteItem = (id) => {
+    listRef.value = listRef.value.filter(item => item.id !== id)
+  }
+
+  return { addItem, deleteItem }
+}

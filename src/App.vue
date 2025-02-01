@@ -1,37 +1,34 @@
+<template>
+  <BlogView />
+</template>
+
 <script setup>
 import BlogView from './components/BlogView.vue'
 </script>
 
-<template>
-  <div class="app">
-    <header>
-      <h1>Blog Management</h1>
-    </header>
-    <main>
-      <BlogView />
-    </main>
-  </div>
-</template>
-
-<style>
-.app {
-  max-width: 1200px;
+<style scoped>
+body {
+  background: #f8f9fa;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
   margin: 0 auto;
-  padding: 20px;
+  padding: 1rem;
 }
 
-header {
-  margin-bottom: 30px;
-  padding: 20px 0;
-  border-bottom: 1px solid #eee;
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #3498db;
+  font-size: 1.2rem;
 }
 
-h1 {
-  color: #333;
-  font-size: 2em;
-}
-
-main {
-  padding: 20px 0;
+.error {
+  background: #e74c3c;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 800px;
+  text-align: center;
 }
 </style>
